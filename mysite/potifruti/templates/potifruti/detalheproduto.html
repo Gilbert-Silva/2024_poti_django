@@ -1,0 +1,36 @@
+{% extends 'potifruti/base.html' %}
+
+{% block subtitulo %}Detalhes do Produto{% endblock %}
+
+{% block conteudo %}
+    <h2>Detalhes do Produto</h2>
+    <div class="item-card">
+        {% if produto.foto %}
+            {% if produto.foto.url %}
+                <img src="{{ produto.foto.url }}" alt="{{ produto.nome }}">
+            {% endif %}
+        {% endif %}
+        <h3>{{ produto.nome }}</h3>
+        <p>Descrição: {{ produto.descricao }}</p>
+
+        {% with cotacaoproduto=produto.cotacaoproduto_set.last %}
+            {% if cotacaoproduto %}
+                <p>Último preço cotado: R$ {{ cotacaoproduto.preco }}</p>
+            {% else %}
+                <p>Preço indisponível</p>
+            {% endif %}
+        {% endwith %}
+
+        <label for="quantidade">Quantidade:</label>
+        <input type="number" id="quantidade" name="quantidade" value="1" min="1" max="20">
+
+        <button type="button" onclick="adicionarAoPedido()">Adicionar ao Pedido</button>
+
+        <script>
+            function adicionarAoPedido() {
+                var quantidade = document.getElementById("quantidade").value;
+                alert('Produto adicionado ao Pedido. Quantidade: ' + quantidade);
+            }
+        </script>
+    </div>
+{% endblock %}

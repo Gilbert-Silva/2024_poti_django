@@ -1,0 +1,31 @@
+{% extends 'potifruti/base.html' %}
+
+{% block conteudo %}
+  <h2>Gerenciar Cotação</h2>
+
+  <h3>Cotação #{{ cotacao.idcotacao }}</h3>
+  <p>Funcionário: {{ cotacao.funcionario.nome }}</p>
+
+  <form method="post" action="{% url 'potifruti:gerenciarcotacao' cotacao_id=cotacao.idcotacao %}">
+    {% csrf_token %}
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Produto</th>
+          <th>Novo Preço</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in itens_cotacao %}
+          <tr>
+            <td>{{ item.produto.nome }}</td>
+            <td>
+              <input type="text" name="novo_preco_{{ item.iditem }}" value="{{ item.preco }}" placeholder="Novo Preço">
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <button type="submit" class="btn btn-success">Concluir Cotação</button>
+  </form>
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends 'potifruti/base.html' %}
+
+{% block conteudo %}
+    <h2>Iniciar Cotação</h2>
+
+    {% if pedidos_em_andamento %}
+        <h3>Itens no Carrinho</h3>
+        <form method="post" action="{% url 'potifruti:iniciarcotacao' %}">
+            {% csrf_token %}
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Produto</th>
+                        <th>Preço</th>
+                        <th>Novo Preço</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for produto_nome, cotacao_produto in grouped_items.items %}
+                        <tr>
+                            <td>{{ produto_nome }}</td>
+                            {% if cotacao_produto %}
+                                {% with cotacaoproduto=item.produto.cotacaoproduto_set.last %}
+                                    {% if cotacaoproduto %}
+                                        <td>R$ {{ cotacaoproduto.preco }}</td>
+                                    {% else %}
+                                        <td>Preço indisponível</td>
+                                    {% endif %}
+                                {% endwith %}
+                            {% else %}
+                                <td>Preço indisponível</td>
+                            {% endif %}
+                            <td>
+                                <input type="number" name="novos_precos[{{ cotacao_produto.produto.idproduto }}]" step="0.01" min="0.00" value="{{ cotacao_produto.preco|default:"0.00" }}">
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <button type="submit">Concluir Cotação</button>
+        </form>
+    {% else %}
+        <p>Nenhum pedido em andamento.</p>
+    {% endif %}
+{% endblock %}

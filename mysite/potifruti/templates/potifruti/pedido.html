@@ -1,0 +1,59 @@
+{% extends 'potifruti/base.html' %}
+
+{% block conteudo %}
+  <h2>Lista de Pedidos</h2>
+
+  {% if pedidos %}
+    {% for pedido in pedidos %}
+      <div class="pedido-card">
+        <h3>Pedido #{{ pedido.idpedido }}</h3>
+        <h4>Nome do Cliente: {{ pedido.cliente.nome }}</h4>
+
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Produto</th>
+              <th>Quantidade</th>
+              <th>Descrição</th>
+              <th>Observações</th>
+              <th>idcotacao</th>
+              <th>Preço Unitário</th>
+              <th>Subtotal</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in pedido.item_set.all %}
+              <tr>
+                <td>{{ item.produto.nome }}</td>
+                <td>{{ item.quantidade }}</td>
+                <td>{{ item.descricao }}</td>
+                <td>{{ item.observacao }}</td>
+                <td>
+                  {% if pedido.cotacao.idcotacao %}
+                    Cotação: {{ pedido.cotacao.idcotacao }}/
+                  {% else %}
+                    Pedido aguardando cotação / 
+                  {% endif %}
+                </td>
+                <td>
+                  {% if item.preco %}
+                    R$ {{ item.preco }}
+                  {% else %}
+                    Preço indisponível/
+                  {% endif %}
+                </td>                               
+                <td>R$ {{ item.subtotal|default:"0.00" }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+
+        {% if pedido.precototal %}
+          <p>Total do Pedido: R$ {{ pedido.precototal }}</p>
+        {% endif %}
+      </div>
+    {% endfor %}
+  {% else %}
+    <p>Nenhum pedido disponível.</p>
+  {% endif %}
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends 'potifruti/base.html' %}
+
+{% block conteudo %}
+    <h2>Produtos Disponíveis</h2>
+    {% if produtos %}
+        <div class="item-container">
+            {% for produto in produtos %}
+                <a href="{% url 'potifruti:detalheproduto' produto.idproduto %}">
+                    <div class="item-card">
+                        {% if produto.foto %}
+                            {% if produto.foto.url %}
+                                <img src="{{ produto.foto.url }}" alt="{{ produto.nome }}">
+                            {% endif %}
+                        {% endif %}
+                        <h3>{{ produto.nome }}</h3>
+                        {% with cotacaoproduto=produto.cotacaoproduto_set.last %}
+                                {% if cotacaoproduto %}
+                                    <p>Preço: R$ {{ cotacaoproduto.preco }}</p>
+                                {% else %}
+                                    <p>Preço indisponível</p>
+                                {% endif %}
+                        {% endwith %}
+                    </div>
+                </a>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>Nenhum produto disponível.</p>
+    {% endif %}
+{% endblock %}

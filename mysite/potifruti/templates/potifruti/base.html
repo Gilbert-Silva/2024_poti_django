@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>PotiFruti</title>
+    <style>
+        /* Your CSS styles here */
+        .item-card {
+            display: inline-block;
+            width: 10%;
+            margin: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            text-align: center;
+        }
+
+        .item-card img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .item-description {
+            height: 80px; /* Fixed height for the description */
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .esgotado {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+    {% block postscript %}
+
+    {% endblock %}
+</head>
+<body>
+    <h1><a href="{% url 'potifruti:index' %}">PotiFruti(Logo?)</a></h1> 
+    <h3><a href="{% url 'potifruti:listapedidos'%}"> Pedidos de Clientes</a></h3> 
+    <h3><a href="{% url 'potifruti:pedidocarrinho'%}"> Pedido Carrinho</a></h3> 
+    <hr>
+    {% block header %}
+
+    {% endblock %}
+
+    {% block conteudo %}
+
+    {% endblock %}
+
+
+    <hr/>
+    {% block menu %}
+        <a href="{% url 'potifruti:index' %}">Home</a>
+        {% block item_menu %}{% endblock %}
+    {% endblock %}
+
+    &copy; 2023 - DSweb/TADS/CNAT/IFRN
+</body>
+</html>

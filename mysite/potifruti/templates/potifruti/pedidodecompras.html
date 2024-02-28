@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>{{ produto.nome }}</h2>
+  <p>{{ produto.descricao }}</p>
+  <p>Preço: R$ {{ produto.preco }}</p>
+
+  <h3>Itens do Último Pedido</h3>
+  <ul>
+    {% for item in itens_pedido %}
+      <li>{{ item.produto.nome }} - Quantidade: {{ item.quantidade }}</li>
+    {% endfor %}
+  </ul>
+
+  <form method="post" action="{% url 'potifruti:detalheproduto' produto.id %}">
+    {% csrf_token %}
+    <label for="quantidade">Quantidade:</label>
+    <input type="number" name="quantidade" value="1" min="1">
+    <button type="submit">Adicionar ao Carrinho</button>
+  </form>
+{% endblock %}

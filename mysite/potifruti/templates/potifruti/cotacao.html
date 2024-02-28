@@ -1,0 +1,11 @@
+{% extends 'potifruti/base.html' %}
+
+{% block conteudo %}
+    <h2>Nova Cotação</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ cotacao_form.as_p }}
+        {{ cotacaoproduto_form.as_p }}
+        <button type="submit">Salvar Cotação</button>
+    </form>
+{% endblock %}

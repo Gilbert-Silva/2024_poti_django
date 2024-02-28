@@ -1,0 +1,61 @@
+{% extends 'potifruti/base.html' %}
+
+{% block conteudo %}
+  <h2>Detalhes da Cotação</h2>
+
+  {% if pedidos %}
+    {% with cotacao_aberta=pedidos.0.cotacao %}
+      {% if cotacao_aberta %}
+        <h3>Cotação Aberta: {{ cotacao_aberta.idcotacao }}</h3>
+      {% else %}
+        <form method="post" action="{% url 'potifruti:iniciarcotacao' %}">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-primary">Iniciar Nova Cotação</button>
+        </form>
+      {% endif %}
+
+      <h4>Itens no Carrinho:</h4>
+      <form method="post" action="{% url 'potifruti:atualizarcotacao' cotacao_id=cotacao_aberta.idcotacao %}">
+        {% csrf_token %}
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Produto</th>
+              <th>Quantidade</th>
+              <th>Preço Unitário</th>
+              <th>Novo Preço</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for pedido in pedidos %}
+              {% if pedido.carrinho %}
+                {% for item in pedido.item_set.all %}
+                  <tr>
+                    <td>{{ item.produto.nome }}</td>
+                    <td>{{ item.quantidade }}</td>
+                    <td>R$ {{ item.preco }}</td>
+                    <td>
+                      <input type="text" name="novo_preco_{{ item.id }}" value="{{ item.preco }}">
+                    </td>
+                  </tr>
+                {% endfor %}
+              {% endif %}
+            {% endfor %}
+          </tbody>
+        </table>
+
+        <button type="submit" class="btn btn-primary">Atualizar Preços</button>
+
+      </form>
+
+      {% if cotacao_aberta %}
+        <form method="post" action="{% url 'potifruti:atualizarcotacao' cotacao_id=cotacao_aberta.idcotacao %}">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-primary">Atualizar Cotação e Finalizar Pedidos</button>
+        </form>
+      {% endif %}
+    {% endwith %}
+  {% else %}
+    <p>Nenhum pedido encontrado.</p>
+  {% endif %}
+{% endblock %}

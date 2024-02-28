@@ -1,0 +1,38 @@
+{% extends 'potifruti/base.html' %}
+
+{% block conteudo %}
+  <h2>Carrinho de Compras</h2>
+
+  {% if pedidos %}
+    <form method="post" action="{% url 'potifruti:pedidocarrinho' %}">
+      {% csrf_token %}
+      {% for pedido in pedidos %}
+        <h3>Pedido #{{ pedido.idpedido }}</h3>
+        <h4>Nome do Cliente: {{ pedido.cliente.nome }}</h4>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Produto</th>
+              <th>Quantidade</th>
+              <th>Preço Unitário</th>
+              <th>Subtotal</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in pedido.item_set.all %}
+              <tr>
+                <td>{{ item.produto.nome }}</td>
+                <td>{{ item.quantidade }}</td>
+                <td>R$ {{ item.preco }}</td>
+                <td>R$ {{ item.subtotal|default:"0.00" }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% endfor %}
+      <button type="submit" class="btn btn-primary">Iniciar Cotação</button>
+    </form>
+  {% else %}
+    <p>Carrinho vazio.</p>
+  {% endif %}
+{% endblock %}
